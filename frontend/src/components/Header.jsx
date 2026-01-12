@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom';
 import {Navbar, Nav, Container} from 'react-bootstrap';
 import {FaShoppingCart, FaUser} from 'react-icons/fa';
 import logo from '../assets/logo.png';
@@ -7,17 +8,17 @@ const Header = () => {
     <header>
         <Navbar bg="dark" variant="dark" expand="md" collapseOnSelect>
              <Container>
-                <Navbar.Brand href="/">
+                <Navbar.Brand as={Link} to='/'>
                     <img
                         src={logo}
-                        alt="Panucci Logo"
+                        alt="Panucci Logo" 
                     />
                     Panucci
                 </Navbar.Brand>
                 <Navbar.Toggle aria-controls="basic-navbar-nav" />
                 <Navbar.Collapse id="basic-navbar-nav">
                     <Nav className="ms-auto">
-                        <Nav.Link href="/cart">
+                        <Nav.Link  as={Link} to='/'>
                             <FaShoppingCart /> Cart
                         </Nav.Link>
                         <Nav.Link href="/login">
