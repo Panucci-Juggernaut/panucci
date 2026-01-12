@@ -1,5 +1,6 @@
 import { Container  } from "react-bootstrap";
 import Header from "./components/Header";
+import Footer from "./components/Footer";
 
 
 const App = () => {
@@ -11,7 +12,7 @@ const App = () => {
           <h1>Welcome to Panucci</h1>
         </Container>
       </main>
-    
+      <Footer />
     </>
   )
 }
