@@ -8,6 +8,7 @@ import { toast } from 'react-toastify';
 import {
   useGetProductsDetailsQuery,
   useUpdateProductMutation,
+  useUploadProductImageMutation,
 } from '../../slices/productsApiSlice';
 
 const ProductEditScreen = () => {
@@ -15,7 +16,7 @@ const ProductEditScreen = () => {
 
   const [name, setName] = useState('');
   const [price, setPrice] = useState(0);
-  const [image, setImage] = useState('');
+  const [imageUrl, setImageUrl] = useState('');
   const [brand, setBrand] = useState('');
   const [category, setCategory] = useState('');
   const [countInStock, setCountInStock] = useState(0);
@@ -29,7 +30,11 @@ const ProductEditScreen = () => {
   } = useGetProductsDetailsQuery(productId);
 
   const [updateProduct, { isLoading: loadingUpdate }] =
-    useUpdateProductMutation();
+  useUpdateProductMutation();
+
+  const [uploadProductImage, { isLoading: loadingUpload }] =
+  useUploadProductImageMutation();
+
 
   const navigate = useNavigate();
 
@@ -40,12 +45,12 @@ const ProductEditScreen = () => {
         productId,
         name,
         price,
-        image,
+        imageUrl,
         brand,
         category,
         description,
         countInStock,
-      });
+      }).unwrap();
       toast.success('product updated successfully');
       refetch();
       navigate('/admin/productlist');
@@ -54,12 +59,25 @@ const ProductEditScreen = () => {
     }
   };
 
+  const uploadFileHandler = async (e) => {
+    const formData = new FormData();
+    formData.append('image', e.target.files[0]);
+    try {
+      const res = await uploadProductImage(formData).unwrap();
+      toast.success(res.message);
+      setImageUrl(res.imageUrl);
+    } catch (err) {
+      toast.error(err?.data?.message || err.error);
+    }
+  };
+
+
   // eslint-disable-next-line react-hooks/exhaustive-deps
     useEffect(() => {
     if (product) {
         setName(product.name);
         setPrice(product.price);
-        setImage(product.image);
+        setImageUrl(product.imageUrl);
         setBrand(product.brand);
         setCategory(product.category);
         setCountInStock(product.countInStock);
@@ -79,7 +97,9 @@ const ProductEditScreen = () => {
         {isLoading ? (
           <Loader />
         ) : error ? (
-          <Message variant='danger'>{error}</Message>
+          <Message variant='danger'>
+            {error?.data?.message || error.error}
+          </Message>
         ) : (
           <Form onSubmit={submitHandler}>
             <Form.Group controlId='name'>
@@ -98,11 +118,25 @@ const ProductEditScreen = () => {
                 type='number'
                 placeholder='Enter price'
                 value={price}
-                onChange={(e) => setPrice(e.target.value)}
+                onChange={(e) => setPrice(Number(e.target.value))}
               ></Form.Control>
             </Form.Group>
 
-            {/* IMAGE INPUT PLACEHOLDER */}
+             <Form.Group controlId='image'>
+              <Form.Label>Image</Form.Label>
+              <Form.Control
+                type='text'
+                placeholder='Enter image url'
+                value={imageUrl}
+                onChange={(e) => setImageUrl(e.target.value)}
+              ></Form.Control>
+              <Form.Control
+                label='Choose File'
+                onChange={uploadFileHandler}
+                type='file'
+              ></Form.Control>
+              {loadingUpload && <Loader />}
+            </Form.Group>
 
             <Form.Group controlId='brand'>
               <Form.Label>Brand</Form.Label>
@@ -120,7 +154,7 @@ const ProductEditScreen = () => {
                 type='number'
                 placeholder='Enter countInStock'
                 value={countInStock}
-                onChange={(e) => setCountInStock(e.target.value)}
+                onChange={(e) => setCountInStock(Number(e.target.value))}
               ></Form.Control>
             </Form.Group>
 
