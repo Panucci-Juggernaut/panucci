@@ -6,6 +6,7 @@ import { toast } from "react-toastify";
 import Rating from "../components/Rating";
 import Loader from "../components/Loader";
 import Message from "../components/Message";
+import Meta from "../components/Meta";
 import { useGetProductsDetailsQuery, useCreateReviewMutation } from "../slices/productsApiSlice";
 import { addToCart } from "../slices/cartSlice";
 
@@ -43,7 +44,7 @@ const ProductScreen = () => {
         refetch();
         toast.success('Review created successfully');
         setRating(0);
-        setComment('');
+        setComment('');  
         } catch (err) {
         toast.error(err?.data?.message || err.error);
         }
@@ -58,6 +59,7 @@ const ProductScreen = () => {
             <Message variant='danger'>{ error?.data?.message || error.error }</Message>
         ) : (
             <>
+            <Meta title={product.name} />
                 <Row>
                 <Col md={5}>
                     <Image src={product.imageUrl} alt={product.name} fluid />
