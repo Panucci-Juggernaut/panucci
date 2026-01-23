@@ -11,8 +11,8 @@ import { PayPalScriptProvider } from '@paypal/react-paypal-js';
 import { Provider } from 'react-redux' 
 import store from './store.js'
 import 'bootstrap/dist/css/bootstrap.min.css'
-// import './assets/styles/bootstrap.custom.css'
-import './assets/styles/index.css'
+import './assets/styles/bootstrap.custom.css'
+// import './assets/styles/index.css'
 import PrivateRoute from './components/PrivateRoute.jsx'
 import AdminRoute from './components/AdminRoute';
 import App from './App.jsx'
