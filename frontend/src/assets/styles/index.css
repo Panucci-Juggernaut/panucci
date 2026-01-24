@@ -23,6 +23,14 @@ main {
   white-space: nowrap; /* Prevent wrapping */
 }
 
+.product-image {
+  height: 180px; /* Fixed height for all product images */
+  object-fit: contain; /* Maintain aspect ratio and fit within the container */
+  width: 100%; /* Full width of the card */
+  /* background-color: #f8f9fa;  */
+  padding: 10px; /* Add some padding around the image */
+}
+
 table td,
 table th {
   text-align: center;
